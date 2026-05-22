@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spoofity - Feel The Music</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow-x: hidden;
+            transition: background 0.3s ease;
+        }
+
+        body.wine-theme {
+            background: linear-gradient(135deg, #722F37 0%, #000000 100%);
+        }
+
+        body.normal-theme {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(29, 185, 84, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1DB954;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .menu-items {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .menu-items a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .menu-items a:hover {
+            color: #1DB954;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-signup {
+            background: white;
+            color: black;
+        }
+
+        .btn-signup:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-login {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-login:hover {
+            border-color: #1DB954;
+            color: #1DB954;
+        }
+
+        .hamburger {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: none;
+            position: relative;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 60px;
+            right: 1rem;
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid #1DB954;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            min-width: 200px;
+            display: none;
+            animation: slideDown 0.3s ease;
+            z-index: 101;
+        }
+
+        .dropdown.active {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            color: white;
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 0.3rem;
+            transition: all 0.3s;
+        }
+
+        .dropdown-item:hover {
+            background: #1DB954;
+            color: black;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .glowing-text {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(29, 185, 84, 0.6));
+            }
+            50% {
+                filter: drop-shadow(0 0 40px rgba(29, 185, 84, 1));
+            }
+        }
+
+        .subtext {
+            font-size: 1.2rem;
+            color: #b3b3b3;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .explore-btn {
+            padding: 1rem 3rem;
+            background: #1DB954;
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(29, 185, 84, 0.4);
+        }
+
+        .explore-btn:hover {
+            background: #1ed760;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(29, 185, 84, 0.6);
+        }
+
+        .explore-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Recommendations Section */
+        .recommendations {
+            padding: 4rem 2rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #1DB954;
+            text-align: center;
+        }
+
+        .playlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .playlist-card {
+            background: linear-gradient(135deg, rgba(29, 185, 84, 0.1) 0%, rgba(29, 185, 84, 0.05) 100%);
+            border: 1px solid rgba(29, 185, 84, 0.3);
+            border-radius: 0.8rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .playlist-card:hover {
+            background: linear-gradient(135deg, rgba(29, 185, 84, 0.2) 0%, rgba(29, 185, 84, 0.1) 100%);
+            border-color: #1DB954;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(29, 185, 84, 0.2);
+        }
+
+        .playlist-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .playlist-name {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .playlist-description {
+            font-size: 0.9rem;
+            color: #b3b3b3;
+            margin-bottom: 1rem;
+        }
+
+        .like-btn {
+            width: 100%;
+            padding: 0.7rem;
+            background: #1DB954;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .like-btn:hover {
+            background: #1ed760;
+        }
+
+        /* Playlists Section */
+        .playlists {
+            padding: 4rem 2rem;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .playlists-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .playlist-item {
+            background: rgba(29, 185, 84, 0.05);
+            border: 1px solid rgba(29, 185, 84, 0.2);
+            border-radius: 0.8rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: grab;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .playlist-item:hover {
+            background: rgba(29, 185, 84, 0.1);
+            border-color: #1DB954;
+        }
+
+        .playlist-item.dragging {
+            cursor: grabbing;
+            opacity: 0.7;
+        }
+
+        .drag-handle {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: #1DB954;
+        }
+
+        .playlist-info {
+            flex: 1;
+        }
+
+        .playlist-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: white;
+        }
+
+        .playlist-item p {
+            font-size: 0.85rem;
+            color: #b3b3b3;
+        }
+
+        .play-btn {
+            background: #1DB954;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .play-btn:hover {
+            background: #1ed760;
+        }
+
+        /* Mini Player */
+        .mini-player {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, rgba(29, 185, 84, 0.2) 0%, rgba(29, 185, 84, 0.05) 100%);
+            border: 1px solid #1DB954;
+            border-radius: 1rem;
+            padding: 1rem;
+            min-width: 280px;
+            box-shadow: 0 8px 32px rgba(29, 185, 84, 0.3);
+            animation: slideUp 0.5s ease;
+            z-index: 50;
+        }
+
+        .mini-player.hidden {
+            display: none;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .player-header span {
+            color: #1DB954;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #1DB954;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #1ed760;
+        }
+
+        .now-playing {
+            margin-bottom: 1rem;
+        }
+
+        .song-title {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .artist {
+            color: #b3b3b3;
+            font-size: 0.85rem;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            height: 4px;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .progress {
+            background: #1DB954;
+            height: 100%;
+            width: 45%;
+            transition: width 0.1s linear;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .control-btn {
+            background: transparent;
+            border: 1px solid #1DB954;
+            color: white;
+            padding: 0.6rem 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            background: #1DB954;
+            transform: scale(1.1);
+        }
+
+        .control-btn.active {
+            background: #1DB954;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-items {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .mini-player {
+                bottom: 1rem;
+                right: 1rem;
+                min-width: 250px;
+            }
+
+            .nav-left {
+                gap: 1rem;
+            }
+
+            .glowing-text {
+                font-size: clamp(2rem, 6vw, 3rem);
+            }
+        }
+    </style>
+</head>
+<body class="normal-theme">
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-left">
+            <div class="logo">
+                <span>♪</span> Spoofity
+            </div>
+            <div class="menu-items">
+                <a href="#premium">Premium</a>
+                <a href="#support">Support</a>
+                <a href="#download">Download</a>
+            </div>
+        </div>
+        <div class="nav-right">
+            <button class="btn btn-signup">Sign up</button>
+            <button class="btn btn-login">Log in</button>
+            <button class="hamburger" id="hamburgerBtn">☰</button>
+        </div>
+    </nav>
+
+    <div class="dropdown" id="dropdown">
+        <div class="dropdown-item" onclick="alert('Profile clicked')">👤 Profile</div>
+        <div class="dropdown-item" onclick="alert('Home clicked')">🏠 Home</div>
+        <div class="dropdown-item" onclick="alert('Playlist clicked')">🎵 Playlist</div>
+        <div class="dropdown-item" onclick="alert('Settings clicked')">⚙️ Settings</div>
+        <div class="dropdown-item" id="themeToggle">🌙 Theme</div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="glowing-text">Feel The Music</h1>
+        <p class="subtext">
+            Discover millions of songs, playlists, podcasts, and artists from all around the world.
+        </p>
+        <button class="explore-btn" onclick="alert('Explore Now clicked!')">🎵 Explore Now</button>
+    </section>
+
+    <!-- Recommendations Section -->
+    <section class="recommendations">
+        <h2 class="section-title">✨ Personalized Recommendations</h2>
+        <div class="playlist-grid" id="recommendationsGrid"></div>
+    </section>
+
+    <!-- Playlists Section -->
+    <section class="playlists">
+        <h2 class="section-title">🎶 Your Playlists (Drag to Reorder)</h2>
+        <div class="playlists-grid" id="playlistsGrid"></div>
+    </section>
+
+    <!-- Mini Player -->
+    <div class="mini-player" id="miniPlayer">
+        <div class="player-header">
+            <span>Now Playing</span>
+            <button class="close-btn" onclick="document.getElementById('miniPlayer').classList.add('hidden')">✕</button>
+        </div>
+        <div class="now-playing">
+            <div class="song-title">🎵 Summer Vibes</div>
+            <div class="artist">By The Groove Squad</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        <div class="controls">
+            <button class="control-btn" onclick="alert('Previous track')">⏮️</button>
+            <button class="control-btn active" id="playPauseBtn" onclick="togglePlayPause()">⏸️</button>
+            <button class="control-btn" onclick="alert('Next track')">⏭️</button>
+            <button class="control-btn" onclick="alert('Volume control')">🔊</button>
+        </div>
+    </div>
+
+    <script>
+        // Recommendations data
+        const recommendations = [
+            { id: 1, name: 'Workout Mix', description: 'High energy tracks', emoji: '💪' },
+            { id: 2, name: 'Chill Vibes', description: 'Relax and unwind', emoji: '😎' },
+            { id: 3, name: 'Party Time', description: 'Dance all night', emoji: '🎉' },
+            { id: 4, name: 'Focus Mode', description: 'Stay concentrated', emoji: '🎯' },
+            { id: 5, name: 'Sad Songs', description: 'Deep emotions', emoji: '😢' },
+            { id: 6, name: 'Road Trip', description: 'Travel companion', emoji: '🚗' },
+        ];
+
+        // Playlists data
+        const playlists = [
+            { id: 1, title: 'Trending Now', songs: '45 songs', emoji: '🔥' },
+            { id: 2, title: 'My Favorites', songs: '128 songs', emoji: '⭐' },
+            { id: 3, title: 'New Releases', songs: '67 songs', emoji: '🆕' },
+            { id: 4, title: 'Workout Beats', songs: '89 songs', emoji: '🎵' },
+        ];
+
+        let isDarkWine = false;
+        let isPlaying = true;
+        let draggedItem = null;
+
+        // Initialize recommendations
+        function renderRecommendations() {
+            const grid = document.getElementById('recommendationsGrid');
+            grid.innerHTML = recommendations.map(playlist => `
+                <div class="playlist-card">
+                    <div class="playlist-emoji">${playlist.emoji}</div>
+                    <div class="playlist-name">${playlist.name}</div>
+                    <div class="playlist-description">${playlist.description}</div>
+                    <button class="like-btn" onclick="toggleLike(this)">🤍 Like</button>
+                </div>
+            `).join('');
+        }
+
+        // Initialize playlists
+        function renderPlaylists() {
+            const grid = document.getElementById('playlistsGrid');
+            grid.innerHTML = playlists.map((playlist, index) => `
+                <div class="playlist-item" draggable="true" data-index="${index}" 
+                     ondragstart="handleDragStart(event)" 
+                     ondragover="handleDragOver(event)" 
+                     ondrop="handleDrop(event)">
+                    <span class="drag-handle">≡</span>
+                    <div class="playlist-info">
+                        <h3>${playlist.emoji} ${playlist.title}</h3>
+                        <p>${playlist.songs}</p>
+                    </div>
+                    <button class="play-btn" onclick="alert('Playing: ${playlist.title}')">▶️ Play</button>
+                </div>
+            `).join('');
+        }
+
+        // Like button toggle
+        function toggleLike(btn) {
+            if (btn.textContent.includes('Like')) {
+                btn.textContent = '❤️ Liked';
+            } else {
+                btn.textContent = '🤍 Like';
+            }
+        }
+
+        // Drag and drop
+        function handleDragStart(e) {
+            draggedItem = e.target.closest('.playlist-item');
+            draggedItem.classList.add('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const targetItem = e.target.closest('.playlist-item');
+            if (draggedItem && targetItem && draggedItem !== targetItem) {
+                const allItems = Array.from(document.querySelectorAll('.playlist-item'));
+                const draggedIndex = allItems.indexOf(draggedItem);
+                const targetIndex = allItems.indexOf(targetItem);
+                
+                if (draggedIndex < targetIndex) {
+                    targetItem.parentNode.insertBefore(draggedItem, targetItem.nextSibling);
+                } else {
+                    targetItem.parentNode.insertBefore(draggedItem, targetItem);
+                }
+            }
+            draggedItem.classList.remove('dragging');
+            draggedItem = null;
+        }
+
+        // Theme toggle
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            isDarkWine = !isDarkWine;
+            const body = document.body;
+            if (isDarkWine) {
+                body.classList.remove('normal-theme');
+                body.classList.add('wine-theme');
+                this.textContent = '☀️ Theme';
+            } else {
+                body.classList.remove('wine-theme');
+                body.classList.add('normal-theme');
+                this.textContent = '🌙 Theme';
+            }
+        });
+
+        // Hamburger menu
+        document.getElementById('hamburgerBtn').addEventListener('click', function() {
+            const dropdown = document.getElementById('dropdown');
+            dropdown.classList.toggle('active');
+        });
+
+        // Play/Pause toggle
+        function togglePlayPause() {
+            const btn = document.getElementById('playPauseBtn');
+            isPlaying = !isPlaying;
+            btn.textContent = isPlaying ? '⏸️' : '▶️';
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', function() {
+            renderRecommendations();
+            renderPlaylists();
+        });
+    </script>
+</body>
+</html>
